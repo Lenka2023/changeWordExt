@@ -1,0 +1,16 @@
+let changeText = document.getElementById('changeText');
+ var input=document.getElementsByTagName("INPUT");
+
+chrome.storage.sync.get('text', function(data) {
+  changeText.innerHTML = data.text;
+  changeText.setAttribute('value', data.text);
+});
+changeText.onclick = function(element) {
+    let text = element.target.value;
+    //alert(text);
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.executeScript(
+          tabs[0].id,
+          {code: 'var input=document.getElementsByTagName("input");for(var i=0;i<input.length;i++){if (input[i].value == "Cat"){input[i].value = "' + text + '";input[i].focus();}}'});
+    });
+  };
